@@ -1,0 +1,20 @@
+{
+  "name": "PadhlePappu",
+  "app_id": "",
+  "type": "ionic1",
+  "integrations": {
+    "cordova": {},
+    "gulp": {
+      "enabled": false
+    }
+  },
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ],
+  "gulp": {
+    "enabled": false
+  }
+}
