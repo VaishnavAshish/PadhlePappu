@@ -1,0 +1,263 @@
+<apex:page controller="Assignment7Controller" sidebar="false">
+    <apex:includeScript value="{!$Resource.handleBarJS}"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/> 
+    <apex:slds />
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en"> 
+    
+        <div class="demo-only" style="padding: 0.5rem; background: rgb(22, 50, 92);">
+            <div class="slds-text-color_inverse slds-text-heading_large slds-text-align_center">Contact Creation Table</div>
+        </div> 
+        <div id="HomePage"></div>
+        <div id="Table"></div>
+
+        
+        <script id="LauncherPage" type="text/x-handlebars-template">
+
+        </br></br>
+            
+        <label class="slds-form-element__label" for="select-01">Select Rows</label>
+            		<select id="row">
+                        <option value="">Please select Rows</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+            			<option>4</option>
+            			<option>5</option>
+                    </select>
+
+                    
+            <label class="slds-form-element__label" for="select-01">Select Column</label>
+            		<select id="col">
+                        <option value="">Please select Column</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+            			<option>4</option>
+            			<option>5</option>
+                    </select>
+
+
+            
+
+
+            &nbsp;&nbsp <button class="slds-button slds-button_brand" onClick=CheckVal();>Create Table</button></br></br>
+         </script>
+        
+        <script type="text/javascript"> 
+        var contactField = ["FirstName","LastName", "Phone","Title","Department"];
+		var handleData = document.getElementById("LauncherPage").innerHTML;
+        var template = Handlebars.compile(handleData);
+        var finaldata = template({
+            
+        });
+        console.log(finaldata);
+        document.getElementById("HomePage").innerHTML = finaldata;
+        var columnGlobal;
+        var RowGlobal;
+        function CheckVal(){
+            $('#Table').show();
+        	var row = $('#row').val();
+            var col = $('#col').val();
+            columnGlobal = col;
+            RowGlobal = row;
+            	if(row == "" || col == ""){
+                	alert('Please Select the row And Column');
+                }
+            	
+            	else {forColOne(row,col);}
+            
+        }
+        function forColOne(rows,cols){
+            
+        	var tab = '<table class="slds-table slds-table_bordered slds-table_cell-buffer"><thead><tr class="slds-text-title_caps">';
+            for(var x=0;x<cols;x++){
+                if(cols == 1){
+                	x = 1;
+                }
+            	tab += '<th scope="col"><div class="slds-truncate" title="Opportunity Name">'+contactField[x]+'</div></th>';
+            }
+            tab += '</tr></thead><tbody>';
+            for(var i=0;i<rows;i++){
+                tab += '<tr>';
+            	for(var j=0;j<cols;j++){
+                	if(j==0){
+                    	tab += '<th scope="row" data-label="Opportunity Name"><div class="slds-truncate" title="Cloudhub"><input name="data" type="text" placeholder="Enter Data" ></div></th>';
+                    }
+                    else if(j==1){tab += '<th id="lastName" scope="row" data-label="Opportunity Name"><div class="slds-truncate" title="Cloudhub"><input name="data" type="text" placeholder="Enter Data"></div></th>';}
+                    else if(j==2){tab += '<th scope="row" data-label="Opportunity Name"><div class="slds-truncate" title="Cloudhub"><input name="data" type="text" placeholder="Enter Mobile Number"></div></th>';}
+                    else if(j==3){tab += '<th scope="row" data-label="Opportunity Name"><div class="slds-truncate" title="Cloudhub"><input name="data" type="text" placeholder="Enter Title"></div></th>';}
+                    else if(j==4){tab += '<th scope="row" data-label="Opportunity Name"><div class="slds-truncate" title="Cloudhub"><input name="data" type="text" placeholder="Enter Department"></div></th>';}
+                }
+                tab += '</tr>';
+            }
+            
+            
+            tab += '</tbody></table><button class="slds-button slds-button_brand" onClick=savefun();>save</button>'
+			document.getElementById("Table").innerHTML = tab;            
+        }var listOfObj = [];
+        function savefun(){
+            var listOfCon = [];
+            if(columnGlobal == 1 && RowGlobal == 1){
+                	insertByLastNameOnly();
+             }
+            else{ 
+            	$('input[name=data]').each(function(index){ 
+                	if($(this).attr("id") == lastName){
+                    	if($(this).val() = ""){
+                        	alert('Please Enter Last Name');
+                        }
+                    }
+                    else{listOfCon.push($(this).val());}
+                	
+                
+            	});
+            console.log(listOfCon);
+            
+                var first = 0;
+                var sec = columnGlobal;
+            	
+            	var toSelect;
+            	if(RowGlobal > columnGlobal){
+                	toSelect = RowGlobal;
+                }
+            	else {toSelect = columnGlobal}
+                for(var y=0;y<toSelect;y++){
+                    
+                	var obj = listOfCon.slice(first, sec);
+                    var objOfCon = {};
+                        objOfCon.lastname = obj[1];
+                        objOfCon.firstname = obj[0];
+                        objOfCon.phone = obj[2];
+                        objOfCon.Title = obj[3];
+                        objOfCon.Department = obj[4];
+            
+                        objOfCon.Title = obj[4];
+                        listOfObj.push(objOfCon);
+                    first = sec;
+                    if(columnGlobal == 1){
+                    	sec = parseInt(sec) + 1;
+                    }
+                    else if(columnGlobal == 2){
+                    	sec = parseInt(sec) + 2;
+                    }
+                    else if(columnGlobal == 3){
+                    	sec = parseInt(sec)+3;
+                    }
+                    else if(columnGlobal == 4){
+                    	sec = parseInt(sec)+4;
+                    }
+                    else if(columnGlobal == 5){
+                    	sec = parseInt(sec)+5;
+                    }
+                    else if(columnGlobal == 6){
+                    	sec = parseInt(sec)+6;
+                    }
+                    
+
+
+                }
+                ToSaveData(listOfObj);
+            }
+        	
+        }
+        
+        function insertByLastNameOnly(){
+        	var lastname = $('input[name=data]').val();
+            objForLastName = {};
+            objForLastName.lastname = lastname;
+            myJSON = JSON.stringify(objForLastName);
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.Assignment7Controller.ContactSave}',
+                myJSON, 
+                function(result, event){
+                  if (event.status) {
+                      // Get DOM IDs for HTML and Visualforce elements like this
+                      alert('All Contacts are saved Sucessfully');
+                      
+                      myResult=result;
+                      console.log(myResult);
+                     } else if (event.type === 'exception') {
+                      	alert('Please fill the mandatory field');
+                  } else {
+                      alert('Please fill the mandatory field');
+                      document.getElementById("responseErrors").innerHTML = event.message;
+                  }
+              }, 
+              {escape: true}
+             );
+            $('#Table').hide();
+        }
+		function ToSaveData(newObj){ 
+        	
+            
+            myJSON = JSON.stringify(newObj);
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.Assignment7Controller.ContactSave}',
+                myJSON, 
+                function(result, event){
+                  if (event.status) {
+                      // Get DOM IDs for HTML and Visualforce elements like this
+                      alert('Contacts are saved Sucessfully');
+                      $('#Table').hide();
+                      myResult=result;
+                      console.log(myResult);
+                     } else if (event.type === 'exception') {
+                      document.getElementById("responseErrors").innerHTML = 
+                          event.message + "<br/>\n<pre>" + event.where + "</pre>";
+                  } else {
+                      alert('Please fill All mandatory fields');
+                      document.getElementById("responseErrors").innerHTML = event.message;
+                  }
+              }, 
+              {escape: true}
+             );
+            
+           
+        }
+        </script>
+    </html>   
+
+</apex:page>
+
+00D6F0000028tb0!ARwAQIkBUUDodHoq5JXYNQ_N1Aic4xWTdY7dBUIkd6oe9kZ0bcY8ks_v_v198S4TrpXuhe7QoOoruc9foJdCgdolFZffeCtE
+
+
+ <serverUrl>https://ap4.salesforce.com/services/Soap/c/43.0/00D6F0000028tb0/0DF6F0000000jfs</serverUrl>
+            <sessionId>00D6F0000028tb0!ARwAQIkBUUDodHoq5JXYNQ_N1Aic4xWTdY7dBUIkd6oe9kZ0bcY8ks_v_v198S4TrpXuhe7QoOoruc9foJdCgdolFZffeCtE</sessionId>
+            <userId>0056F000009eOiaQAE</userId>
+
+{accountnumber=AccountNumber, accountsource=AccountSource, active__c=Active__c, amount__c=Amount__c, annualrevenue=AnnualRevenue, billingaddress=BillingAddress, billingcity=BillingCity, billingcountry=BillingCountry, billinggeocodeaccuracy=BillingGeocodeAccuracy, billinglatitude=BillingLatitude, ...}
+
+map<String, Schema.SObjectField> FieldMap = Schema.SObjectType.Account.fields.getMap();
+    
+        for (Schema.SObjectField f : FieldMap.values()) {
+                
+            Schema.DescribeFieldResult DescField = f.getDescribe();
+                
+            system.debug('Name: ' +  DescField.getName());
+            system.debug('Type: ' +  DescField.getType());
+            
+}
+
+ResultWrapper:[fieldTypeFieldWrapperList=(FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=Id, fieldType=ID, isCustom=false]), fieldTypeName=ID], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=IsDeleted, fieldType=BOOLEAN, isCustom=false], FieldClass:[fieldName=Active__c, fieldType=BOOLEAN, isCustom=true], FieldClass:[fieldName=Match_Billing_Address__c, fieldType=BOOLEAN, isCustom=true]), fieldTypeName=BOOLEAN], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=MasterRecordId, fieldType=REFERENCE, isCustom=false], FieldClass:[fieldName=ParentId, fieldType=REFERENCE, isCustom=false], FieldClass:[fieldName=OwnerId, fieldType=REFERENCE, isCustom=false], FieldClass:[fieldName=CreatedById, fieldType=REFERENCE, isCustom=false], FieldClass:[fieldName=LastModifiedById, fieldType=REFERENCE, isCustom=false], FieldClass:[fieldName=DandbCompanyId, fieldType=REFERENCE, isCustom=false], FieldClass:[fieldName=ClassTeacher__c, fieldType=REFERENCE, isCustom=true]), fieldTypeName=REFERENCE], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=Name, fieldType=STRING, isCustom=false], FieldClass:[fieldName=BillingCity, fieldType=STRING, isCustom=false], FieldClass:[fieldName=BillingState, fieldType=STRING, isCustom=false], FieldClass:[fieldName=BillingPostalCode, fieldType=STRING, isCustom=false], FieldClass:[fieldName=BillingCountry, fieldType=STRING, isCustom=false], FieldClass:[fieldName=ShippingCity, fieldType=STRING, isCustom=false], FieldClass:[fieldName=ShippingState, fieldType=STRING, isCustom=false], FieldClass:[fieldName=ShippingPostalCode, fieldType=STRING, isCustom=false], FieldClass:[fieldName=ShippingCountry, fieldType=STRING, isCustom=false], FieldClass:[fieldName=AccountNumber, fieldType=STRING, isCustom=false], ...), fieldTypeName=STRING], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=Type, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=BillingGeocodeAccuracy, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=ShippingGeocodeAccuracy, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=Industry, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=Ownership, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=Rating, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=CleanStatus, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=AccountSource, fieldType=PICKLIST, isCustom=false], FieldClass:[fieldName=CustomerPriority__c, fieldType=PICKLIST, isCustom=true], FieldClass:[fieldName=SLA__c, fieldType=PICKLIST, isCustom=true], ...), fieldTypeName=PICKLIST], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=BillingStreet, fieldType=TEXTAREA, isCustom=false], FieldClass:[fieldName=ShippingStreet, fieldType=TEXTAREA, isCustom=false], FieldClass:[fieldName=Description, fieldType=TEXTAREA, isCustom=false]), fieldTypeName=TEXTAREA], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=BillingLatitude, fieldType=DOUBLE, isCustom=false], FieldClass:[fieldName=BillingLongitude, fieldType=DOUBLE, isCustom=false], FieldClass:[fieldName=ShippingLatitude, fieldType=DOUBLE, isCustom=false], FieldClass:[fieldName=ShippingLongitude, fieldType=DOUBLE, isCustom=false], FieldClass:[fieldName=No_of_contact__c, fieldType=DOUBLE, isCustom=true], FieldClass:[fieldName=NumberofLocations__c, fieldType=DOUBLE, isCustom=true], FieldClass:[fieldName=maxStudent__c, fieldType=DOUBLE, isCustom=true], FieldClass:[fieldName=Rating__c, fieldType=DOUBLE, isCustom=true], FieldClass:[fieldName=Amount__c, fieldType=DOUBLE, isCustom=true], FieldClass:[fieldName=Number_of_Contacts__c, fieldType=DOUBLE, isCustom=true]), fieldTypeName=DOUBLE], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=BillingAddress, fieldType=ADDRESS, isCustom=false], FieldClass:[fieldName=ShippingAddress, fieldType=ADDRESS, isCustom=false]), fieldTypeName=ADDRESS], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=Phone, fieldType=PHONE, isCustom=false], FieldClass:[fieldName=Fax, fieldType=PHONE, isCustom=false]), fieldTypeName=PHONE], FieldTypeFieldWrapper:
+
+[FieldsList=(FieldClass:[fieldName=Website, fieldType=URL, isCustom=false], FieldClass:[fieldName=PhotoUrl, fieldType=URL, isCustom=false]), fieldTypeName=URL], ...)]
+
